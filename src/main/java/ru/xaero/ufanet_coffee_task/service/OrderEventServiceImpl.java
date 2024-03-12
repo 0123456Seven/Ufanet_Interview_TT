@@ -9,14 +9,13 @@ import ru.xaero.ufanet_coffee_task.entity.OrderEvent;
 import ru.xaero.ufanet_coffee_task.repo.OrderEventRepository;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 @Transactional
 public class OrderEventServiceImpl implements OrderEventService{
-    private static final String ORDER_CANSELLED = "Заказ отменен";
+    private static final String ORDER_CANCELLED = "Заказ отменен";
     private static final String ORDER_DELIVERED = "Заказ выдан";
     private static final String ORDER_REGISTERED = "Заказ зарегистрирован";
     private static final String ORDER_IN_PROGRESS = "Заказ взят в работу";
@@ -52,7 +51,7 @@ public class OrderEventServiceImpl implements OrderEventService{
                 if(orderStatus.equals(ORDER_REGISTERED)){
                     info.append(getRegisteredInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
                 }
-                else if(orderStatus.equals(ORDER_CANSELLED)){
+                else if(orderStatus.equals(ORDER_CANCELLED)){
                     info.append(getCancelledInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
                 }
                 else if (orderStatus.equals(ORDER_IN_PROGRESS)){
@@ -111,7 +110,8 @@ public class OrderEventServiceImpl implements OrderEventService{
         Long orderId = orderEvent.getOrder().getId();
         Long employeeId = orderEvent.getOrder().getEmployee().getId();
         LocalDateTime dateTime = orderEvent.getEventTime();
-        String info = "Идентификатор заказа = "+orderId+"" +
+        String info = "Статус заказа : "+orderEvent.getOrderStatus().getOrderStatus()+
+                "\nИдентификатор заказа = "+orderId+"" +
                 "\nИдентификатор сотрудника = "+employeeId+
                 "\nДата и время = "+dateTime;
         return info;
@@ -121,7 +121,8 @@ public class OrderEventServiceImpl implements OrderEventService{
         Long orderId = orderEvent.getOrder().getId();
         Long employeeId = orderEvent.getOrder().getEmployee().getId();
         LocalDateTime dateTime = orderEvent.getEventTime();
-        String info = "Идентификатор заказа = "+orderId+"" +
+        String info = "Статус заказа : "+orderEvent.getOrderStatus().getOrderStatus()+
+                "\nИдентификатор заказа = "+orderId+"" +
                 "\nИдентификатор сотрудника = "+employeeId+
                 "\nДата и время = "+dateTime;
         return info;
@@ -131,7 +132,8 @@ public class OrderEventServiceImpl implements OrderEventService{
         Long orderId = orderEvent.getOrder().getId();
         Long employeeId = orderEvent.getOrder().getEmployee().getId();
         LocalDateTime dateTime = orderEvent.getEventTime();
-        String info = "Идентификатор заказа = "+orderId+"" +
+        String info = "Статус заказа : "+orderEvent.getOrderStatus().getOrderStatus()+
+                "\nИдентификатор заказа = "+orderId+"" +
                 "\nИдентификатор сотрудника = "+employeeId+
                 "\nДата и время = "+dateTime;
         return info;
@@ -141,7 +143,7 @@ public class OrderEventServiceImpl implements OrderEventService{
         boolean isCancel = false;
         List<OrderEvent> orderEvents = findAllByOrderId(orderId);
         for(OrderEvent orderEvent : orderEvents){
-            if(orderEvent.getOrderStatus().getOrderStatus().equals(ORDER_CANSELLED)){
+            if(orderEvent.getOrderStatus().getOrderStatus().equals(ORDER_CANCELLED)){
                 isCancel = true;
             }
             else{
