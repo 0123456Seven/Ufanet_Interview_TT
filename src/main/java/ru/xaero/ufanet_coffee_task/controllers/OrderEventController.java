@@ -20,11 +20,11 @@ public class OrderEventController {
     }
 
     @GetMapping("/all-info/{id}")
-    public OrderEvent getAllInfo(@PathVariable(name = "id") Long id){
+    public OrderEvent getJsonInfo(@PathVariable(name = "id") Long id){
         return orderEventService.findById(id);
     }
     @GetMapping("/info/{id}")
-    public StringBuilder getRegisteredInfo(@PathVariable(name = "id") Long id){
+    public StringBuilder getAllInfo(@PathVariable(name = "id") Long id){
         return orderEventService.getInfo(id);
     }
     @GetMapping("/find-all/{id}")
