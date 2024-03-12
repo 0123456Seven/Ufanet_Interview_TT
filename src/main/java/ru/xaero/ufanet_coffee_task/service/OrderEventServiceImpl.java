@@ -9,6 +9,7 @@ import ru.xaero.ufanet_coffee_task.entity.OrderEvent;
 import ru.xaero.ufanet_coffee_task.repo.OrderEventRepository;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,6 +19,8 @@ public class OrderEventServiceImpl implements OrderEventService{
     private static final String ORDER_CANSELLED = "Заказ отменен";
     private static final String ORDER_DELIVERED = "Заказ выдан";
     private static final String ORDER_REGISTERED = "Заказ зарегистрирован";
+    private static final String ORDER_IN_PROGRESS = "Заказ взят в работу";
+    private static final String ORDER_READY = "Заказ готов к выдаче";
     @PersistenceContext
     private EntityManager entityManager;
     private final OrderEventRepository orderEventRepository;
@@ -35,6 +38,38 @@ public class OrderEventServiceImpl implements OrderEventService{
         Query query = entityManager.createQuery(hql);
         query.setParameter("orderId", orderId);
         return query.getResultList();
+    }
+    public StringBuilder getInfo(Long orderId){
+        List<OrderEvent> orderEvents = findAllByOrderId(orderId);
+
+        // Проверяем, есть ли события заказа
+        StringBuilder info = new StringBuilder();
+        if (orderEvents.isEmpty()) {
+            System.out.println("Для указанного заказа нет ни одного события.");
+        } else {
+            for(OrderEvent orderEvent : orderEvents){
+                String orderStatus = orderEvent.getOrderStatus().getOrderStatus();
+                if(orderStatus.equals(ORDER_REGISTERED)){
+                    info.append(getRegisteredInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
+                }
+                else if(orderStatus.equals(ORDER_CANSELLED)){
+                    info.append(getCancelledInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
+                }
+                else if (orderStatus.equals(ORDER_IN_PROGRESS)){
+                    info.append(getInProgressInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
+                }
+                else if (orderStatus.equals(ORDER_READY)) {
+                    info.append(getReadyInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
+                }
+                else if(orderStatus.equals(ORDER_DELIVERED)){
+                    info.append(getDeliveredInfo(orderEvent.getId())).append("\n").append("-------------------\n") ;
+                }
+
+            }
+        }
+        return info;
+
+
     }
 
     public String getRegisteredInfo(Long id){

@@ -23,25 +23,9 @@ public class OrderEventController {
     public OrderEvent getAllInfo(@PathVariable(name = "id") Long id){
         return orderEventService.findById(id);
     }
-    @GetMapping("/registered-info/{id}")
-    public String getRegisteredInfo(@PathVariable(name = "id") Long id){
-        return orderEventService.getRegisteredInfo(id);
-    }
-    @GetMapping("/cancelled-info/{id}")
-    public String getCancelledInfo(@PathVariable(name = "id") Long id){
-        return orderEventService.getCancelledInfo(id);
-    }
-    @GetMapping("/in-progress-info/{id}")
-    public String getInProgressInfo(@PathVariable(name = "id") Long id){
-        return orderEventService.getInProgressInfo(id);
-    }
-    @GetMapping("/ready-for-pickup-info/{id}")
-    public String getReadyForPickupInfo(@PathVariable(name = "id") Long id){
-        return orderEventService.getReadyInfo(id);
-    }
-    @GetMapping("/delivered-info/{id}")
-    public String getInfo(@PathVariable(name = "id") Long id){
-        return orderEventService.getDeliveredInfo(id);
+    @GetMapping("/info/{id}")
+    public StringBuilder getRegisteredInfo(@PathVariable(name = "id") Long id){
+        return orderEventService.getInfo(id);
     }
     @GetMapping("/find-all/{id}")
     public List<OrderEvent> findAllByOrderId(@PathVariable(name = "id") Long id){
